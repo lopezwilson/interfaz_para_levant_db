@@ -1,0 +1,8 @@
+# Carpetas generadas automáticamente
+build/
+dist/
+env/
+
+# Archivos generados por el sistema
+config.db
+dist.zip
