@@ -8,6 +8,12 @@ import threading
 import time
 from plyer import notification
 
+#CONSTANTES
+VERSION = "2.0.0"
+DIR_NAME = os.path.dirname(os.path.abspath(__file__))
+DB_NAME = os.path.join(DIR_NAME, "config.db")
+
+
 # ----------- BASE DE DATOS (SQLite) ------------
 
 def crear_base_de_datos():
@@ -165,7 +171,8 @@ def importar_bd():
 
             registrar_importacion(base)
             tiempo_total = int(time.time() - inicio)
-            messagebox.showinfo("Éxito", f"Base de datos importada correctamente en {tiempo_total} segundos.")
+            notificar(base, tiempo_total)
+
 
         except subprocess.CalledProcessError as e:
             messagebox.showerror("Error", f"No se pudo importar la base de datos.\n\n{e}")
@@ -174,13 +181,7 @@ def importar_bd():
         finally:
             detener_tiempo.set()
             barra_progreso.stop()
-
-            #Notiificar una vez levantada la bd
-            notificar(base, tiempo_total)
-            etiqueta_tiempo.config(text=f"Importación finalizada en {tiempo_transcurrido[0]} segundos.")
-
-            
-
+            messagebox.showinfo("Éxito", f"Base de datos importada correctamente en {tiempo_total} segundos.")
 
     threading.Thread(target=tarea_importar).start()
 
@@ -235,4 +236,9 @@ if config:
     entrada_base.insert(0, config[4])
     entrada_password.insert(0, config[5])
 
+etiqueta_version = tk.Label(ventana, text=f"Versión {VERSION}", fg="gray")
+etiqueta_version.pack(side="bottom", pady=5)
+
 ventana.mainloop()
+
+
